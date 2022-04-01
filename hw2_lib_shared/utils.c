@@ -225,7 +225,7 @@ int add_elem(staff_array *staff, staff_array *arr, uint16_t num)
         }
     }
     if (num >= staff->size) {
-        printf("num = %d, size = %d\n", num, staff->size);
+        printf("num = %d, size = %u\n", num, staff->size);
         return -1;
     }
     arr->name[arr->size] = staff->name[num];

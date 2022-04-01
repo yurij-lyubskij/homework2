@@ -115,7 +115,7 @@ int unite_buffers(results* temp, uint16_t count, results *result, int (*comp)(ui
 }
 
 int find_by_job(results *result, staff_array *staff, int size, int (*comp)(uint8_t l, uint8_t r)) {
-    int errflag = 0;
+    int errflag;
     int fail = init_result(result, size, comp(0,1)); // проверяем, ищем максимум, или минимум
     if (fail) {
         return -1;

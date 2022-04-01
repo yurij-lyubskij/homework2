@@ -2,7 +2,7 @@
 
 void show_buff(FILE *fout, staff_array *staff) {
     for (uint32_t i = 0; i < staff->size; ++i) {
-        fprintf(fout, "person № %d\n", i);
+        fprintf(fout, "person № %u\n", i);
         fprintf(fout, "name = %s\n", staff->name[i]);
         fprintf(fout, "surname = %s\n", staff->surname[i]);
         fprintf(fout, "gender = %d\n", staff->gender[i]);
@@ -21,7 +21,7 @@ void print_jobs(FILE *fout, job_array *jobs) {
 }
 
 void print_people(FILE *fout, staff_array *staff) {
-    fprintf(fout, "%d\n", staff->size*REPEATS);
+    fprintf(fout, "%u\n", staff->size*REPEATS);
     for (int j = 0; j < REPEATS; ++j) {
         for (unsigned long i = 0; i < staff->size; ++i) {
             fprintf(fout, "%s\n", staff->name[i]);
@@ -33,11 +33,6 @@ void print_people(FILE *fout, staff_array *staff) {
             fprintf(fout, "%d\n", staff->job_index[i]);
         }
     }
-}
-
-void print_to_file(FILE *fout, job_array *jobs, staff_array *staff) {
-    print_jobs(fout, jobs);
-    print_people(fout, staff);
 }
 
 char *string_input(FILE *fin) {
@@ -89,7 +84,7 @@ int read_person(FILE *fin, staff_array *staff, uint16_t i, uint16_t job_count) {
     }
 
     args_read = fscanf(fin, "%hd", (short *) &(staff->experience[i]));
-    if (args_read != 1 || (staff->experience[i] < 0) || (staff->experience[i] > MAX_EXP) ||
+    if (args_read != 1 || (staff->experience[i] > MAX_EXP) ||
         (staff->experience[i] >= staff->age[i])) {
         printf("6\n");
         free(staff->name[i]);
@@ -107,7 +102,7 @@ int read_person(FILE *fin, staff_array *staff, uint16_t i, uint16_t job_count) {
         return -1;
     }
     args_read = fscanf(fin, "%hu\n", &(staff->job_index[i]));
-    if (args_read != 1 || staff->job_index[i] < 0 || staff->job_index[i] >= job_count) {
+    if (args_read != 1 || staff->job_index[i] >= job_count) {
         printf("8\n");
         free(staff->name[i]);
         free(staff->surname[i]);
@@ -154,29 +149,10 @@ int read_people(FILE *fin, staff_array *staff, uint16_t job_size) {
     return 0;
 }
 
-int read_from_file(FILE *fin, staff_array *staff, job_array *jobs) {
-    int fail = read_jobs(fin, jobs);
-    if (fail) {
-        return -1;
-    }
-
-    fail = read_people(fin, staff, jobs->size);
-    if (fail) {
-        return -1;
-    }
-    return 0;
-}
-
 void show_list_by_job(results *result, FILE *fout) {
     for (int i = 0; i < result->size; ++i) {
         show_buff(fout, result->staff_by_job + i);
         fprintf(fout, "\n");
-    }
-}
-
-void show_jobs(job_array *jobs) {
-    for (uint16_t i = 0; i < jobs->size; ++i) {
-        printf("%s\n", jobs->job_names[i]);
     }
 }
 

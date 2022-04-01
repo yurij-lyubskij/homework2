@@ -54,7 +54,7 @@ int add_elem(staff_array *staff, staff_array *arr, uint16_t num);
 int alloc_buff(staff_array *staff, int new_capacity);
 void heap_sort(staff_array *staff, int n);
 void sort_by_job(results* result);
-int unite_buffers(results temp_result[], uint16_t count, results *result, int (*comp)(uint8_t l, uint8_t r));
+int unite_buffers(results* temp, uint16_t count, results *result, int (*comp)(uint8_t l, uint8_t r));
 int free_result(results *result);
 void free_jobs(job_array *jobs);
 void free_staff(staff_array *staff);

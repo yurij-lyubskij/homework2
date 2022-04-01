@@ -50,7 +50,7 @@ void free_people(staff_array *staff);
 int find_young(results* result, staff_array *staff, int size);
 int find_old(results* result, staff_array *staff, int size);
 void init_staff(staff_array *staff);
-int alloc_buff(staff_array *staff, size_t new_capacity);
+int alloc_buff(staff_array *arr, size_t new_capacity);
 void heap_sort(staff_array *staff, int n);
 void sort_by_job(results* result);
 void free_staff(staff_array *staff);
