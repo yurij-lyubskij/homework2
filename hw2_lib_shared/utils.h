@@ -44,7 +44,7 @@ typedef struct results{
 
 char ** grow_str_array(char **buffer, uint16_t *capacity, uint16_t new_capacity);
 int add_job(job_array *jobs, char *element);
-void free_people();
+void free_people(staff_array *staff);
 int find_young(results* result, staff_array *staff, int size);
 int find_old(results* result, staff_array *staff, int size);
 void show_buff(FILE *fout, staff_array*staff);
