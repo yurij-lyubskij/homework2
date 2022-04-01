@@ -24,10 +24,10 @@ jobs:
       - run: pip3 install --user cpplint
       - run: sudo apt install clang-format
       - run: clang-tidy hw2_lib/*.c hw2_lib/*.h hw2_lib_shared/*.c hw2_lib_shared/*.h  -warnings-as-errors=* -extra-arg=-std=c99 -- -I hw1_lib/
-#      - run: cppcheck hw2_lib hw2_lib_shared prepare_test.c stress_test.c --enable=all --inconclusive --error-exitcode=1 -I hw2_lib/ --suppress=missingIncludeSystem
-#      - run: clang-format  ./hw2_lib/*.c hw2_lib_shared/*.c prepare_test.c stress_test.c >a
-#      - run: clang-format  ./hw2_lib/*.c hw2_lib_shared/*.c prepare_test.c stress_test.c >b
-#      - run: diff a b
+      - run: cppcheck hw2_lib hw2_lib_shared prepare_test.c stress_test.c --enable=all --inconclusive --error-exitcode=1 -I hw2_lib/ --suppress=missingIncludeSystem
+      - run: clang-format  ./hw2_lib/*.c hw2_lib_shared/*.c prepare_test.c stress_test.c >a
+      - run: clang-format  ./hw2_lib/*.c hw2_lib_shared/*.c prepare_test.c stress_test.c >b
+      - run: diff a b
 #      - run: cpplint --extensions=c --filter=-readability/casting,-legal/copyright hw1_lib/* main.c
 
   stress_test:
