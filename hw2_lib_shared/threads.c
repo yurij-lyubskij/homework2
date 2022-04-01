@@ -1,7 +1,8 @@
-#include "inout.h"
-#include "utils.h"
 #include <pthread.h>
 #include <unistd.h>
+
+#include "inout.h"
+#include "utils.h"
 
 typedef struct {
   results *result;
@@ -58,13 +59,13 @@ void free_temp(size_t num_threads, int size) {
   free(arg);
 }
 
-int alloc_temp(unsigned long num_threads, int size, int max) {
+int alloc_temp(size_t num_threads, int size, int max) {
   tid = calloc(num_threads, sizeof(pthread_t));
   arg = calloc(num_threads, sizeof(thread_arg));
   temp_result = calloc(num_threads, sizeof(results));
   for (int i = 0; i < num_threads; i++) {
     int fail = init_result(temp_result + i, size,
-                           max); // проверяем, ищем максимум, или минимум
+                           max);  // проверяем, ищем максимум, или минимум
     if (fail) {
       free(tid);
       free(arg);
@@ -110,11 +111,11 @@ int find_by_job(results *result, staff_array *staff, int size,
                 int (*comp)(uint8_t l, uint8_t r)) {
   int errflag;
   int fail = init_result(result, size,
-                         comp(0, 1)); // проверяем, ищем максимум, или минимум
+                         comp(0, 1));  // проверяем, ищем максимум, или минимум
   if (fail) {
     return -1;
   }
-  unsigned long num_threads = sysconf(_SC_NPROCESSORS_ONLN) - 1;
+  size_t num_threads = sysconf(_SC_NPROCESSORS_ONLN) - 1;
   fail = alloc_temp(num_threads, size, comp(0, 1));
   if (fail) {
     return -1;

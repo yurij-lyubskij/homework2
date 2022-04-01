@@ -23,7 +23,7 @@ void print_jobs(FILE *fout, job_array *jobs) {
 void print_people(FILE *fout, staff_array *staff) {
   fprintf(fout, "%u\n", staff->size * REPEATS);
   for (int j = 0; j < REPEATS; ++j) {
-    for (unsigned long i = 0; i < staff->size; ++i) {
+    for (uint32_t  i = 0; i < staff->size; ++i) {
       fprintf(fout, "%s\n", staff->name[i]);
       fprintf(fout, "%s\n", staff->surname[i]);
       fprintf(fout, "%d\n", staff->gender[i]);
@@ -66,7 +66,7 @@ int read_person(FILE *fin, staff_array *staff, uint16_t i, uint16_t job_count) {
     free_people(staff);
     return -1;
   }
-  int args_read = fscanf(fin, "%hd", (short *)&(staff->gender[i]));
+  int args_read = fscanf(fin, "%hu", (uint16_t *)&(staff->gender[i]));
   if (args_read != 1 || ((staff->gender[i]) != 0 && (staff->gender[i]) != 1)) {
     printf("4\n");
     free(staff->name[i]);
@@ -74,7 +74,7 @@ int read_person(FILE *fin, staff_array *staff, uint16_t i, uint16_t job_count) {
     free_people(staff);
     return -1;
   }
-  args_read = fscanf(fin, "%hd", (short *)&(staff->age[i]));
+  args_read = fscanf(fin, "%hu", (uint16_t *)&(staff->age[i]));
   if (args_read != 1 || (staff->age[i] < MIN_AGE) ||
       (staff->age[i] > MAX_AGE)) {
     printf("5\n");
@@ -84,7 +84,7 @@ int read_person(FILE *fin, staff_array *staff, uint16_t i, uint16_t job_count) {
     return -1;
   }
 
-  args_read = fscanf(fin, "%hd", (short *)&(staff->experience[i]));
+  args_read = fscanf(fin, "%hu", (uint16_t *)&(staff->experience[i]));
   if (args_read != 1 || (staff->experience[i] > MAX_EXP) ||
       (staff->experience[i] >= staff->age[i])) {
     printf("6\n");
@@ -183,20 +183,20 @@ void write_random_people(staff_array *staff, FILE *fout) {
   char *female_names[NAMES] = {"Анна",  "Юлия",  "Екатерина", "Надежда",
                                "Дарья", "Софья", "Елизавета"};
   for (int i = 0; i < PEOPLE; i++) {
-    int gender = rand() % 2;
-    staff->name[staff->size] = *(male_names + rand() % NAMES);
-    staff->surname[staff->size] = *(male_surnames + rand() % NAMES);
+    int gender = rand_r(0) % 2;
+    staff->name[staff->size] = *(male_names + rand_r(0) % NAMES);
+    staff->surname[staff->size] = *(male_surnames + rand_r(0) % NAMES);
     if (gender) {
-      staff->name[staff->size] = *(female_names + rand() % NAMES);
-      staff->surname[staff->size] = *(female_surnames + rand() % NAMES);
+      staff->name[staff->size] = *(female_names + rand_r(0) % NAMES);
+      staff->surname[staff->size] = *(female_surnames + rand_r(0) % NAMES);
     }
     staff->gender[staff->size] = gender;
-    int age = MIN_AGE + rand() % (MAX_AGE - MIN_AGE);
+    int age = MIN_AGE + rand_r(0) % (MAX_AGE - MIN_AGE);
     staff->age[staff->size] = age;
-    staff->experience[staff->size] = rand() % (age - MIN_AGE + 1);
-    double pay = rand() % MAX_PAY;
+    staff->experience[staff->size] = rand_r(0) % (age - MIN_AGE + 1);
+    double pay = rand_r(0) % MAX_PAY;
     staff->salary[staff->size] = pay;
-    staff->job_index[staff->size] = rand() % JOBS;
+    staff->job_index[staff->size] = rand_r(0) % JOBS;
     staff->size++;
   }
   print_people(fout, staff);

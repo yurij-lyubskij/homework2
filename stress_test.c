@@ -1,12 +1,11 @@
+#include <time.h>
+
 #include "inout.h"
 #include "utils.h"
-
-#include <time.h>
 
 #define TRIES 10
 
 int main() {
-
   FILE *fin = fopen(NAME, "r");
   if (fin == NULL) {
     return -1;

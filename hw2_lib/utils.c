@@ -3,9 +3,9 @@
 void swap(staff_array *staff, uint16_t l, uint16_t r) {
   char *name = staff->name[l];
   char *surname = staff->surname[l];
-  short gender = staff->gender[l];
-  short age = staff->age[l];
-  short exp = staff->experience[l];
+  char gender = staff->gender[l];
+  uint8_t age = staff->age[l];
+  uint8_t exp = staff->experience[l];
   double salary = staff->salary[l];
   uint16_t index = staff->job_index[l];
 
@@ -33,7 +33,7 @@ int cmp(staff_array *staff, uint16_t l, uint16_t r) {
 void heapify(staff_array *staff, int n, int i) {
   int largest = i;
   int left = 2 * i + 1;  // левый
-  int right = 2 * i + 2; // правый
+  int right = 2 * i + 2;  // правый
 
   // Если левый дочерний элемент больше корня
   if (left < n && cmp(staff, left, largest) > 0)
@@ -104,11 +104,11 @@ void init_staff(staff_array *staff) {
   staff->capacity = 0;
 }
 
-int alloc_buff(staff_array *arr, unsigned long new_capacity) {
+int alloc_buff(staff_array *arr, size_t new_capacity) {
   if (new_capacity <= arr->capacity) {
     return -1;
   }
-  unsigned long size = new_capacity * sizeof(char *);
+  size_t size = new_capacity * sizeof(char *);
   char **new_name = realloc(arr->name, size);
   if (new_name == NULL) {
     return -1;
@@ -207,7 +207,7 @@ int free_result(results *result) {
 
 int add_elem(staff_array *staff, staff_array *arr, uint16_t num) {
   if (arr->size >= arr->capacity) {
-    unsigned long new_capacity = DEFAULT_CAP;
+    size_t new_capacity = DEFAULT_CAP;
     if (new_capacity < (arr->capacity) * 2) {
       new_capacity = 2 * (arr->capacity);
     }
@@ -230,18 +230,18 @@ int add_elem(staff_array *staff, staff_array *arr, uint16_t num) {
   return 0;
 }
 
-int is_less(short l, short r) { return l < r; }
+int is_less(uint8_t l, uint8_t r) { return l < r; }
 
-int is_more(short l, short r) { return l > r; }
+int is_more(uint8_t l, uint8_t r) { return l > r; }
 
 int find_by_job(results *result, staff_array *staff, int size,
-                int (*comp)(short l, short r)) {
+                int (*comp)(uint8_t l, uint8_t r)) {
   int fail = init_result(result, size,
-                         comp(0, 1)); // проверяем, ищем максимум, или минимум
+                         comp(0, 1));  // проверяем, ищем максимум, или минимум
   if (fail) {
     return -1;
   }
-  for (unsigned long i = 0; i < staff->size; ++i) {
+  for (size_t i = 0; i < staff->size; ++i) {
     uint16_t index = staff->job_index[i];
     staff_array *res = &((result->staff_by_job)[index]);
     if (staff->age[i] == result->age[index]) {
