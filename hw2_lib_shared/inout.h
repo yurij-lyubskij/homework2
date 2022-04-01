@@ -4,6 +4,7 @@
 
 #define REPEATS 10
 #define NAME "test"
+#define OUT "2.txt"
 
 void show_jobs(job_array* jobs);
 void show_list_by_job(results* result, FILE *fout);

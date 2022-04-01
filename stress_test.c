@@ -25,23 +25,32 @@ int main()
     for (int i = 0; i < TRIES; ++i) {
         clock_t t = clock();
         find_young(&young, &staff, jobs.size);
-//        show_list_by_job(&young, stdout);
         free_result(&young);
         time_young += (clock() - t) / (double) (CLOCKS_PER_SEC);
         t = clock();
+
         find_old(&old, &staff, jobs.size);
-//        show_list_by_job(&old, stdout);
         free_result(&old);
         time_old += (clock() - t) / (double) (CLOCKS_PER_SEC);
     }
 
-
     time_old /= TRIES;
     time_young /= TRIES;
 
+    FILE *fout = fopen(OUT, "w");
+    if (fout == NULL) {
+        return -1;
+    }
     fprintf((stdout), "time_old = %lf seconds\n", time_old);
     fprintf((stdout), "time_young = %lf seconds\n", time_young);
 
+    find_young(&young, &staff, jobs.size);
+    show_list_by_job(&young, fout);
+    free_result(&young);
+
+    find_old(&old, &staff, jobs.size);
+    show_list_by_job(&old, fout);
+    free_result(&old);
     free_people(&staff);
     free_jobs(&jobs);
 
