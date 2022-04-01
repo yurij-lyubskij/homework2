@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "inout.h"
 
 void show_buff(FILE *fout, staff_array *staff) {
@@ -183,20 +185,21 @@ void write_random_people(staff_array *staff, FILE *fout) {
   char *female_names[NAMES] = {"Анна",  "Юлия",  "Екатерина", "Надежда",
                                "Дарья", "Софья", "Елизавета"};
   for (int i = 0; i < PEOPLE; i++) {
-    int gender = rand_r(0) % 2;
-    staff->name[staff->size] = *(male_names + rand_r(0) % NAMES);
-    staff->surname[staff->size] = *(male_surnames + rand_r(0) % NAMES);
+    uint32_t seed = 0;
+    uint8_t gender =  rand_r(&seed) % 2;
+    staff->name[staff->size] = *(male_names + rand_r(&seed) % NAMES);
+    staff->surname[staff->size] = *(male_surnames + rand_r(&seed) % NAMES);
     if (gender) {
-      staff->name[staff->size] = *(female_names + rand_r(0) % NAMES);
-      staff->surname[staff->size] = *(female_surnames + rand_r(0) % NAMES);
+      staff->name[staff->size] = *(female_names + rand_r(&seed) % NAMES);
+      staff->surname[staff->size] = *(female_surnames + rand_r(&seed) % NAMES);
     }
     staff->gender[staff->size] = gender;
-    int age = MIN_AGE + rand_r(0) % (MAX_AGE - MIN_AGE);
+    int age = MIN_AGE + rand_r(&seed) % (MAX_AGE - MIN_AGE);
     staff->age[staff->size] = age;
-    staff->experience[staff->size] = rand_r(0) % (age - MIN_AGE + 1);
-    double pay = rand_r(0) % MAX_PAY;
+    staff->experience[staff->size] = rand_r(&seed) % (age - MIN_AGE + 1);
+    double pay = rand_r(&seed) % MAX_PAY;
     staff->salary[staff->size] = pay;
-    staff->job_index[staff->size] = rand_r(0) % JOBS;
+    staff->job_index[staff->size] = rand_r(&seed) % JOBS;
     staff->size++;
   }
   print_people(fout, staff);

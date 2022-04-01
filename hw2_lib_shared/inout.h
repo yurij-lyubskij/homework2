@@ -15,4 +15,5 @@ int read_people(FILE *fin, staff_array *staff, uint16_t job_size);
 void write_random_people(staff_array* staff, FILE *fout);
 void write_jobs(FILE *fout);
 int read_jobs(FILE *fin, job_array *jobs);
+extern int rand_r (unsigned int *__seed);
 #endif //HW2_STATIC_INOUT_H
