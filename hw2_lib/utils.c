@@ -177,11 +177,11 @@ int alloc_buff(staff_array *arr, unsigned long new_capacity) {
 
 int init_result(results *result, int size, int max) {
     result->size = size;
-    result->age = calloc(result->size, sizeof(short));
+    result->age = calloc(result->size, sizeof(uint8_t));
     if (result->age == NULL) {
         return -1;
     }
-    result->staff_by_job = malloc(result->size * sizeof(staff_array));
+    result->staff_by_job = calloc(result->size, sizeof(staff_array));
     if (result->staff_by_job == NULL) {
         free(result->age);
         return -1;
