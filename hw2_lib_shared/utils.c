@@ -32,8 +32,8 @@ int cmp(staff_array *staff, uint16_t l, uint16_t r) {
 
 void heapify(staff_array *staff, int n, int i) {
   int largest = i;
-  int left = 2 * i + 1;  // левый
-  int right = 2 * i + 2;  // правый
+  int left = 2 * i + 1;
+  int right = 2 * i + 2;
 
   // Если левый дочерний элемент больше корня
   if (left < n && cmp(staff, left, largest) > 0)

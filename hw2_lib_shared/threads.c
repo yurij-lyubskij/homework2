@@ -65,7 +65,7 @@ int alloc_temp(size_t num_threads, int size, int max) {
   temp_result = calloc(num_threads, sizeof(results));
   for (int i = 0; i < num_threads; i++) {
     int fail = init_result(temp_result + i, size,
-                           max);  // проверяем, ищем максимум, или минимум
+                           max);
     if (fail) {
       free(tid);
       free(arg);
@@ -111,7 +111,7 @@ int find_by_job(results *result, staff_array *staff, int size,
                 int (*comp)(uint8_t l, uint8_t r)) {
   int errflag;
   int fail = init_result(result, size,
-                         comp(0, 1));  // проверяем, ищем максимум, или минимум
+                         comp(0, 1));
   if (fail) {
     return -1;
   }

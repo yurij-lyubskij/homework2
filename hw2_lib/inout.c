@@ -23,7 +23,7 @@ void print_jobs(FILE *fout, job_array *jobs) {
 void print_people(FILE *fout, staff_array *staff) {
   fprintf(fout, "%u\n", staff->size * REPEATS);
   for (int j = 0; j < REPEATS; ++j) {
-    for (uint32_t  i = 0; i < staff->size; ++i) {
+    for (uint32_t i = 0; i < staff->size; ++i) {
       fprintf(fout, "%s\n", staff->name[i]);
       fprintf(fout, "%s\n", staff->surname[i]);
       fprintf(fout, "%d\n", staff->gender[i]);
