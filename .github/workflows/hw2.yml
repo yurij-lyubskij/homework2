@@ -52,10 +52,8 @@ jobs:
     - run: sudo apt-get update -y
     - run: sudo apt install cmake gcc libgtest-dev valgrind lcov
     - run: sudo apt-get install -y clang-tools
-    - run: git clone https://github.com/facebook/infer.git
-    - run: cd infer
-    - run: sudo ./build-infer.sh -y clang
-    - run: sudo make install
+    - run: curl -sSL "https://github.com/facebook/infer/releases/download/v1.1.0/infer-linux64-v1.1.0.tar.xz" | sudo tar -C /opt -xJ && sudo ln -s "/opt/infer-linux64-v1.1.0/bin/infer" /usr/local/bin/infer
+    - run:
     - run: cd ..
     - run: sudo cmake -D SAN=1 .
     - run: sudo infer run -- make
