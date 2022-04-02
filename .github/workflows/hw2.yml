@@ -57,8 +57,8 @@ jobs:
     - run: valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./tests/test_shared
     - run: valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./tests/test_static
     - run: sudo ./tests/test_shared && ./tests/test_static
-#    - run: sudo scan-build make
-    - run: lcov -t "./tests/test_shared" -o coverage.info -c -d "./hw2_lib/CMakeFiles/hw2_lib.dir/" && genhtml -o report coverage.info
+    - run: sudo scan-build make
+    - run: lcov -t lcov -t "./tests/test_static" -o coverage.info -c -d "./hw2_lib" && genhtml -o report coverage.info
 #    - run: lcov -t "./tests/test_shared" -o coverage.info -c -d "./hw2_lib/CMakeFiles/hw2_lib.dir/" && genhtml -o report coverage.info
     - name: upload artifact
       uses: actions/upload-artifact@v2
