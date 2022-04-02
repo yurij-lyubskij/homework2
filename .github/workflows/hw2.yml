@@ -54,7 +54,7 @@ jobs:
     - run: sudo apt-get install -y clang-tools
     - run: git clone https://github.com/facebook/infer.git
     - run: cd infer
-    - run: sudo ./build-infer.sh clang
+    - run: sudo ./build-infer.sh -y clang
     - run: sudo make install
     - run: cd ..
     - run: sudo cmake -D SAN=1 .
