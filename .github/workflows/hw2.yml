@@ -38,7 +38,7 @@ jobs:
       - run: sudo apt-get update -y
       - run: sudo apt install cmake gcc libgtest-dev valgrind lcov
       - run: sudo apt-get install -y clang-tools
-      - run: sudo cmake .
+      - run: sudo cmake -D SAN=0 .
       - run: sudo make
       - run: sudo ./prepare_test
       - run: ./hw2_static
@@ -52,7 +52,13 @@ jobs:
     - run: sudo apt-get update -y
     - run: sudo apt install cmake gcc libgtest-dev valgrind lcov
     - run: sudo apt-get install -y clang-tools
+    - run: git clone https://github.com/facebook/infer.git
+    - run: cd infer
+    - run: sudo ./build-infer.sh clang
+    - run: sudo make install
+    - run: cd ..
     - run: sudo cmake -D SAN=1 .
+    - run: sudo infer run -- make
     - run: sudo make
     - run: sudo ./tests/test_static && sudo ./tests/test_shared
     - run: sudo cmake -D SAN=2 .
@@ -64,7 +70,7 @@ jobs:
     - run: sudo cmake -D SAN=4 .
     - run: sudo make
     - run: sudo ./tests/test_static && sudo ./tests/test_shared
-    - run: sudo cmake  -D SAN=0 .
+    - run: sudo cmake -D SAN=0 .
     - run: sudo scan-build make
     - run: sudo make
     - run: valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./tests/test_shared
