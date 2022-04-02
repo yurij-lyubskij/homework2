@@ -1,6 +1,22 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(hw2_static)
 
+if (SAN EQUAL 1)
+    set(SANITIZER_FLAGS "-fsanitize=address")
+endif()
+
+if (SAN EQUAL 2)
+    set(SANITIZER_FLAGS "-fsanitize=thread")
+endif()
+
+if (SAN EQUAL 3)
+    set(SANITIZER_FLAGS "-fsanitize=undefined")
+endif()
+
+if (SAN EQUAL 4)
+    set(SANITIZER_FLAGS -fsanitize=leak)
+endif()
+
 add_subdirectory(hw2_lib)
 add_subdirectory(hw2_lib_shared)
 

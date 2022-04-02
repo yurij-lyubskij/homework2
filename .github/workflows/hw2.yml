@@ -52,11 +52,26 @@ jobs:
     - run: sudo apt-get update -y
     - run: sudo apt install cmake gcc libgtest-dev valgrind lcov
     - run: sudo apt-get install -y clang-tools
+    - run: sudo cmake -D SAN=1 .
+    - run: sudo make
+    - run: sudo ./tests/test_static && sudo ./tests/test_shared
+    - run: sudo cmake -D SAN=2 .
+    - run: sudo make
+    - run: sudo ./tests/test_static && sudo ./tests/test_shared
+    - run: sudo cmake -D SAN=3 .
+    - run: sudo make
+    - run: sudo ./tests/test_static && sudo ./tests/test_shared
+    - run: sudo cmake -D SAN=4 .
+    - run: sudo make
+    - run: sudo ./tests/test_static && sudo ./tests/test_shared
     - run: sudo cmake .
     - run: sudo scan-build make
     - run: sudo make
     - run: valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./tests/test_shared
     - run: valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./tests/test_static
+    - run: sudo cmake .
+    - run: sudo make
+    - run: sudo ./tests/test_static && sudo ./tests/test_shared
     - run: sudo ./tests/test_static && sudo ./tests/test_shared
     - run: find ./ -type f -iname '*.gcda'
     - run: sudo lcov -t "./tests/test_static" -o coverage.info -c -d "./hw2_lib/" && genhtml -o report coverage.info
