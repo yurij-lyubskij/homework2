@@ -52,9 +52,7 @@ jobs:
     - run: sudo apt-get update -y
     - run: sudo apt install cmake gcc libgtest-dev valgrind lcov
     - run: sudo apt-get install -y clang-tools
-    - run: export SL="https://github.com/facebook/infer/releases/download/v1.1.0/infer-linux64-v1.1.0.tar.xz"
-    - run: export OP="/opt/infer-linux64-v1.1.0/bin/infer"
-    - run: curl -sSL $SL | sudo tar -C /opt -xJ && sudo ln -s $OP /usr/local/bin/infer
+    - run: curl -sSL ${{ secrets.SL }} | sudo tar -C /opt -xJ && sudo ln -s ${{ secrets.OP }} /usr/local/bin/infer
     - run: sudo cmake -D SAN=1 .
     - run: sudo infer run -- make
     - run: sudo make
