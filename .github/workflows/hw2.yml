@@ -64,7 +64,7 @@ jobs:
     - run: sudo cmake -D SAN=4 .
     - run: sudo make
     - run: sudo ./tests/test_static && sudo ./tests/test_shared
-    - run: sudo cmake .
+    - run: sudo cmake  -D SAN=0 .
     - run: sudo scan-build make
     - run: sudo make
     - run: valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./tests/test_shared

@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(hw2_static)
 
+if (SAN EQUAL 0)
+    set(SANITIZER_FLAGS "")
+endif()
+
 if (SAN EQUAL 1)
     set(SANITIZER_FLAGS "-fsanitize=address")
 endif()
