@@ -59,8 +59,8 @@ jobs:
     - run: valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./tests/test_static
     - run: sudo ./tests/test_static && sudo ./tests/test_shared
     - run: find ./ -type f -iname '*.gcda'
-    - run: sudo lcov -t "./tests/test_static" -o coverage.info -c -d "./hw2_lib/CMakeFiles/hw2_lib.dir/" && genhtml -o report coverage.info
-#    - run: lcov -t "./tests/test_shared" -o coverage.info -c -d "./hw2_lib/CMakeFiles/hw2_lib.dir/" && genhtml -o report coverage.info
+    - run: sudo lcov -t "./tests/test_static" -o coverage.info -c -d "./hw2_lib/" && genhtml -o report coverage.info
+    - run: sudo lcov -t ./tests/test_shared -o coverage1.info -c -d ./hw2_lib_shared/ && genhtml -o report coverage1.info
     - name: upload artifact
       uses: actions/upload-artifact@v2
       with:
