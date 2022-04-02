@@ -53,7 +53,7 @@ jobs:
     - run: sudo apt install cmake gcc libgtest-dev valgrind lcov
     - run: sudo apt-get install -y clang-tools
     - run: sudo cmake .
-#    - run: sudo scan-build make
+    - run: sudo scan-build make
     - run: sudo make
     - run: valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./tests/test_shared
     - run: valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./tests/test_static
