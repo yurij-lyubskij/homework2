@@ -1,0 +1,85 @@
+
+name: BASIC CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ making-hw2 ]
+  pull_request:
+    branches: [ making-hw2 ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: sudo apt-get update -y
+      - run: sudo apt-get install -y clang-tidy cppcheck
+      - run: sudo apt-get install python3-pip
+      - run: pip3 install --user cpplint
+      - run: sudo apt install clang-format
+      - run: clang-tidy hw2_lib/*.c hw2_lib/*.h hw2_lib_shared/*.c hw2_lib_shared/*.h  -warnings-as-errors=* -extra-arg=-std=c99 -- -I hw2_lib/
+      - run: cppcheck hw2_lib hw2_lib_shared prepare_test.c stress_test.c --enable=all --inconclusive --error-exitcode=1 -I hw2_lib/ --suppress=missingIncludeSystem
+      - run: clang-format  ./hw2_lib/*.c hw2_lib_shared/*.c prepare_test.c stress_test.c >a
+      - run: clang-format  ./hw2_lib/*.c hw2_lib_shared/*.c prepare_test.c stress_test.c >b
+      - run: diff a b
+      - run: cpplint --extensions=c --filter=-readability/casting,-legal/copyright hw1_lib/* main.c
+
+  stress_test:
+    runs-on: ubuntu-latest
+    needs: [static]
+    steps:
+      - uses: actions/checkout@v2
+      - run: sudo apt-get update -y
+      - run: sudo apt install cmake gcc libgtest-dev valgrind lcov
+      - run: sudo apt-get install -y clang-tools
+      - run: sudo cmake -D SAN=0 .
+      - run: sudo make
+      - run: sudo ./prepare_test
+      - run: ./hw2_static
+      - run: ./hw2_shared
+      - run: diff 1.txt 2.txt
+  tests:
+    runs-on: ubuntu-latest
+    needs: [static]
+    steps:
+    - uses: actions/checkout@v2
+    - run: sudo apt-get update -y
+    - run: sudo apt install cmake gcc libgtest-dev valgrind lcov
+    - run: sudo apt-get install -y clang-tools
+    - run: curl -sSL ${{ secrets.SL }} | sudo tar -C /opt -xJ && sudo ln -s ${{ secrets.OP }} /usr/local/bin/infer
+    - run: sudo cmake -D SAN=1 .
+    - run: sudo infer run -- make
+    - run: sudo make
+    - run: sudo ./tests/test_static && sudo ./tests/test_shared
+    - run: sudo cmake -D SAN=2 .
+    - run: sudo make
+    - run: sudo ./tests/test_static && sudo ./tests/test_shared
+    - run: sudo cmake -D SAN=3 .
+    - run: sudo make
+    - run: sudo ./tests/test_static && sudo ./tests/test_shared
+    - run: sudo cmake -D SAN=4 .
+    - run: sudo make
+    - run: sudo ./tests/test_static && sudo ./tests/test_shared
+    - run: sudo cmake -D SAN=0 .
+    - run: sudo scan-build make
+    - run: sudo make
+    - run: valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./tests/test_shared
+    - run: valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./tests/test_static
+    - run: sudo cmake .
+    - run: sudo make
+    - run: sudo ./tests/test_static && sudo ./tests/test_shared
+    - run: sudo ./tests/test_static && sudo ./tests/test_shared
+    - run: find ./ -type f -iname '*.gcda'
+    - run: sudo lcov -t "./tests/test_static" -o coverage.info -c -d "./hw2_lib/" && genhtml -o report coverage.info
+    - run: sudo lcov -t ./tests/test_shared -o coverage1.info -c -d ./hw2_lib_shared/ && genhtml -o report coverage1.info
+    - name: upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: cov_report
+        path: ./report
