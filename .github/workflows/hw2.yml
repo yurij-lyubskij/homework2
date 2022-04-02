@@ -32,7 +32,7 @@ jobs:
 
   stress_test:
     runs-on: ubuntu-latest
- #   needs: [static]
+    needs: [static]
     steps:
       - uses: actions/checkout@v2
       - run: sudo apt-get update -y
@@ -44,29 +44,24 @@ jobs:
       - run: ./hw2_static
       - run: ./hw2_shared
       - run: diff 1.txt 2.txt
-      #    - run: sudo scan-build make
-      - run: lcov -t "./tests/test_hw1" -o coverage.info -c -d "./hw2_lib/CMakeFiles/hw2_lib.dir/" && genhtml -o report coverage.info
-      - name: upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: cov_report
-          path: ./report
-#  test:
-#    runs-on: ubuntu-latest
-#    needs: [static]
-#    steps:
-#    - uses: actions/checkout@v2
-#    - run: sudo apt-get update -y
-#    - run: sudo apt install cmake gcc libgtest-dev valgrind lcov
-#    - run: sudo apt-get install -y clang-tools
-#    - run: sudo cmake .
-#    - run: sudo make
-#    - run: valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./tests/test_hw2
-#    - run: sudo ./tests/test_hw1
-##    - run: sudo scan-build make
-#    - run: lcov -t "./tests/test_hw1" -o coverage.info -c -d "./hw2_lib/CMakeFiles/hw2_lib.dir/" && genhtml -o report coverage.info
-#    - name: upload artifact
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: cov_report
-#        path: ./report
+  tests:
+    runs-on: ubuntu-latest
+    needs: [static]
+    steps:
+    - uses: actions/checkout@v2
+    - run: sudo apt-get update -y
+    - run: sudo apt install cmake gcc libgtest-dev valgrind lcov
+    - run: sudo apt-get install -y clang-tools
+    - run: sudo cmake .
+    - run: sudo make
+    - run: valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./tests/test_shared
+    - run: valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./tests/test_static
+    - run: sudo ./tests/test_shared && ./tests/test_static
+#    - run: sudo scan-build make
+    - run: lcov -t "./tests/test_shared" -o coverage.info -c -d "./hw2_lib/CMakeFiles/hw2_lib.dir/" && genhtml -o report coverage.info
+#    - run: lcov -t "./tests/test_shared" -o coverage.info -c -d "./hw2_lib/CMakeFiles/hw2_lib.dir/" && genhtml -o report coverage.info
+    - name: upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: cov_report
+        path: ./report
